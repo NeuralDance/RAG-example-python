@@ -1,0 +1,36 @@
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
+
+# Load environment variables from .env file
+load_dotenv()
+
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+
+def getLlmRespone(prompt, json_mode=False):
+    if json_mode:
+        response_format = "json_object"
+        systemPrompt = """You are a helpful assistant designed to output JSON."""
+    else:
+        response_format = "text"
+        systemPrompt = """You are a helpful assistant."""
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo-0125",
+        response_format={"type":  response_format},
+        messages=[
+            {"role": "system", "content": systemPrompt},
+            {"role": "user", "content": prompt},
+        ]
+    )
+
+    return response.choices[0].message.content
+
+
+def getTextForLlm(df, k=7):
+    text = ""
+    for i in df[0:k]["TextChunk"]:
+        text += i
+        text += "\n\n"
+    return text
