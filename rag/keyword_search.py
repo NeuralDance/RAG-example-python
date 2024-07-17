@@ -1,10 +1,11 @@
 import pandas as pd
 from rank_bm25 import BM25Okapi
+from typing import List
 
 
 # could be made a class Keywordsearch 
 # Different types of keyword search could inherit (BM25, Splade, Stringsearch, ... ) from
-def keywordSearch(df, query):
+def keywordSearch(df: pd.DataFrame, query: str) -> List[float]:
 
     # Tokenize the corpus
     tokenized_corpus = [doc.split(" ") for doc in df['TextChunk']]
@@ -18,7 +19,4 @@ def keywordSearch(df, query):
     # Get the scores of the keyword search for each embedding in the table
     doc_scores = bm25.get_scores(tokenized_query)
 
-    # Add BM25 scores to the embeddings table
-    df['BM25_Score'] = doc_scores
-
-    return df
+    return doc_scores

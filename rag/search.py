@@ -1,6 +1,6 @@
 
 from dataloader.loader import generateEmbedding
-from .knn_search import semanticSearch
+from .knn_search import calc_semantic_distances
 from .keyword_search import keywordSearch
 from .rerank import rerank
 from .llm_generation import getLlmRespone, getTextForLlm
@@ -11,10 +11,10 @@ def RAG(query, data):
     input_embedding = generateEmbedding(query)
 
     # Semantic Search: perform kNN search with cosine similarity
-    data = semanticSearch(data, 'Embeddings', input_embedding)
+    data["kNN_distance"] = calc_semantic_distances(data, 'Embeddings', input_embedding)
 
     # Keyword Search: perform BM25
-    data = keywordSearch(data, query)
+    data['BM25_Score'] = keywordSearch(data, query)
 
     # Rerank: rerank with RFF
     data = rerank(data)

@@ -3,7 +3,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # could be made a class semanticSearch 
 # Different types of semantic search could inherit (kNN, aNN, ... ) from
-def semanticSearch(df, embeddings_column, input_embedding):
+def calc_semantic_distances(df, embeddings_column, input_embedding):
 
     # setting k equal to the number of embeddings in the table 
     # to retrieve similarity metrics for all text chunks
@@ -20,6 +20,4 @@ def semanticSearch(df, embeddings_column, input_embedding):
     distances = 1 - similarities[0]  # 1 - cosine_similarity gives us distances
 
     # Add kNN scores to the embeddings table
-    df["kNN_distance"] = distances
-
-    return df
+    return distances
