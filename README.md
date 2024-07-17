@@ -32,8 +32,22 @@ More info on BM25: https://en.wikipedia.org/wiki/Okapi_BM25
 
 ### 4) Reranking - Reciprocal Rank Fusion (RFF)
 
-We will now have two rankings of all text chunks in our document collection: A ranking by keyword search and a ranking by semantic search.
+We will now have two rankings of all text chunks in our document collection: A ranking by keyword search and a ranking by semantic search. To combine these into one ranking we use Reciprocal Rank Fusion (RFF). A more advanced (but paid) alternative woule be Cohere Reranker.
 
 ### 5) Output Generation - LLM Request
 
+We generate the final answer with an LLM. We give the LLM a very basic system prompt and a text string consisting of the top k embeddings, ranked by the Reciprocal Rank Fusion (RFF).
+
 Working with RAG you will soon realise it still is an immature technoloy. We might add more compley steps to this RAG for presentation purposes.
+
+## How to run this?
+
+In the root of the repo run.
+
+```
+python main.py
+```
+
+You will be asked to provide your query. If you run this the first time it might tske a bit as the documents need to be embedded (same if you add more documents later).
+
+Happy testing!
