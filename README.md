@@ -10,17 +10,29 @@ This is a basic example is not using any vector database, but loads all embeddin
 
 ## Deatils to the RAG Implementation
 
-### Pre-Setp: Loading Data from PDF files
+### Pre-Set-Up: Loading Data from PDF files
 
-We load PDF files and chunk each page into multiple embeddings. Each embedding is max. 800 characters long while we try to not cut off in the middle of words/sentences. We clean the text chunks for special characters. All the chunks are embedded using OpenAI's `text-embedding-3-small`.
+If you want to have some test data download the PDFs [here](https://drive.google.com/drive/folders/1PWICaG6HF5EtmmN23fs8-UZDxHz05Y_y?usp=sharing.). Save the docs in a folder and add the folder path in your `.env` file under `FOLDER_PATH_DOCUMENTS` (there you also need to set your OpenAI key!).
+
+The code takes the folder, checks for all PDFs and embeds the ones that are not embedded (Embedded files are saved in a csv file in the same folder). We chunk each page of a PDF into multiple embeddings. Each embedding is max. 800 characters long while we try to not cut off in the middle of words/sentences. We clean the text chunks for special characters. All the chunks are embedded using OpenAI's `text-embedding-3-small`.
 
 ### 1) User Query
 
+The incoming user query is embedded using `text-embedding-3-small`, similar to all text chunks in our document collection. The query is then routed to both the Keyword Search and the Semantic Search.
+
 ### 2) Semantic Search - kNN
+
+Using k-Nearest Neighbours and the cosine similarity, we find the closest k embeddings in the document collection to the embedding of the user query.
 
 ### 3) Keyword Search - BM25
 
+We use BM25 for keyword search - BM for best match.
+
+More info on BM25: https://en.wikipedia.org/wiki/Okapi_BM25
+
 ### 4) Reranking - Reciprocal Rank Fusion (RFF)
+
+We will now have two rankings of all text chunks in our document collection: A ranking by keyword search and a ranking by semantic search.
 
 ### 5) Output Generation - LLM Request
 
