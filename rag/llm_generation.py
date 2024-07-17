@@ -4,11 +4,20 @@ from openai import OpenAI
 
 # Load environment variables from .env file
 load_dotenv()
-
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 
+# summarise the top k embeddings ranked by the reranker and add them to single string for the llm prompt
+def getTextForLlm(df, k=7):
+    text = ""
+    for i in df[0:k]["TextChunk"]:
+        text += i
+        text += "\n\n"
+    return text
+
+# Generate the final response to the user with an LLM 
 def getLlmRespone(prompt, json_mode=False):
+
     if json_mode:
         response_format = "json_object"
         systemPrompt = """You are a helpful assistant designed to output JSON."""
@@ -24,13 +33,7 @@ def getLlmRespone(prompt, json_mode=False):
             {"role": "user", "content": prompt},
         ]
     )
-
     return response.choices[0].message.content
 
 
-def getTextForLlm(df, k=7):
-    text = ""
-    for i in df[0:k]["TextChunk"]:
-        text += i
-        text += "\n\n"
-    return text
+
