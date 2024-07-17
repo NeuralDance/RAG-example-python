@@ -1,10 +1,6 @@
 from PyPDF2 import PdfReader
 import re
 import pandas as pd
-from openai import OpenAI
-from dotenv import load_dotenv
-import os
-
 
 def split_text_into_chunks(text, n=800):
     """

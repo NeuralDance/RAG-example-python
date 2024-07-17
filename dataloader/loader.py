@@ -102,7 +102,7 @@ def loadDataset(file_path):
     })
 
     df['Embeddings'] = df.TextChunk.apply(
-        lambda x: get_embedding(x, model='text-embedding-3-small'))
+        lambda x: generateEmbedding(x, model='text-embedding-3-small'))
     df['ChunkLength'] = df.TextChunk.apply(lambda x: len(x))
     df = df[["TextChunk", "ChunkLength", "PageNum", "Embeddings"]]
 
