@@ -1,27 +1,31 @@
 
-from dataloader.loader import get_embedding
-from .knn_search import kNN_search
-from .keyword_search import runBM25
-from .rerank import rerank_rff
+from dataloader.loader import generateEmbedding
+from .knn_search import semanticSearch
+from .keyword_search import keywordSearch
+from .rerank import rerank
 from .llm_generation import getLlmRespone, getTextForLlm
 
 
 def RAG(query, data):
-    # Perform kNN search
-    input_embedding = get_embedding(query)
-    top_3_embeddings = kNN_search(data, 'Embeddings', input_embedding)
+    # Generate embedding vector of the input user query
+    input_embedding = generateEmbedding(query)
 
-    # perform BM25
-    data = runBM25(data, query)
+    # Semantic Search: perform kNN search with cosine similarity
+    data = semanticSearch(data, 'Embeddings', input_embedding)
 
-    # rerank with RFF
-    data = rerank_rff(data)
+    # Keyword Search: perform BM25
+    data = keywordSearch(data, query)
 
-    # get text for LLM based on top ranked Embeddings
-    textForLlm = getTextForLlm(data, k=7)
+    # Rerank: rerank with RFF
+    data = rerank(data)
 
-    prompt = query + "Answer your question based on the following information: " + textForLlm
+    # get text for LLM based on top ranked Embeddings by RAG
+    retrievedEmbeddingTexts = getTextForLlm(data, k=7)
 
+    # Prepare user prompt based on user input and retrieved text embeddings by RAG
+    prompt = query + "Answer your question based on the following information: " + retrievedEmbeddingTexts
+
+    # Generate an LLM response
     response = getLlmRespone(prompt)
 
     return response

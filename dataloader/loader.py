@@ -11,10 +11,8 @@ from .chunking import split_text_into_chunks, chunkFileByChunkSize
 
 # Load environment variables from .env file
 load_dotenv()
-
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-import os
 
 def check_embedded_file_existence(file_path):
     # Extract directory and filename from the original file path
@@ -27,25 +25,24 @@ def check_embedded_file_existence(file_path):
 
     # Check if the embedded file exists
     if os.path.exists(embedded_file_path):
-        #print(f"The embedded file {embedded_filename} exists in the directory.")
         return True
     else:
-        #print(f"The embedded file {embedded_filename} does not exist in the directory.")
         return False
 
 
 def embedDocument(file_path):
 
-    # check if already embedded 
+    # load embeddings table into df
+    directory = os.path.dirname(file_path)
+    filename = os.path.basename(file_path)
+
+    # Construct the embedded file path
+    embedded_filename = 'Embedded_' + filename.replace('.pdf', '.csv')
+    embedded_file_path = os.path.join(directory, embedded_filename)
+
+
+    # check if document is already embedded 
     if check_embedded_file_existence(file_path):
-        #print("Embeddings table for doc already exists. Loading it!")
-        # load embeddings table into df
-        directory = os.path.dirname(file_path)
-        filename = os.path.basename(file_path)
-    
-        # Construct the embedded file path
-        embedded_filename = 'Embedded_' + filename.replace('.pdf', '.csv')
-        embedded_file_path = os.path.join(directory, embedded_filename)
     
         # Load the CSV file with semicolon separator
         df = pd.read_csv(embedded_file_path, sep=';')
@@ -54,9 +51,10 @@ def embedDocument(file_path):
         df['Embeddings'] = df['Embeddings'].apply(json.loads)
         return df
     
-    else:
-        
+    # if not yet embedded, embed
+    else:     
         print("Embeddings table doesnt exist. Embedding documents...") 
+        
         # generate embeddings table 
         list_chunks,list_pagenum = chunkFileByChunkSize(file_path)
         filename = os.path.basename(file_path)
@@ -67,21 +65,21 @@ def embedDocument(file_path):
             'Filename': filename,
         })
         
-        df['Embeddings'] = df.TextChunk.apply(lambda x: get_embedding(x, model='text-embedding-3-small'))
+        # generate embeddings on the TextChunk column
+        df['Embeddings'] = df.TextChunk.apply(lambda x: generateEmbedding(x, model='text-embedding-3-small'))
         df['ChunkLength'] = df.TextChunk.apply(lambda x: len(x))
         df = df[["Filename", "TextChunk","ChunkLength","PageNum","Embeddings"]]
         
-        # saving 
-        directory = os.path.dirname(file_path)
-        filename = os.path.basename(file_path)
-        
-        # Construct the embedded file path
-        embedded_filename = 'Embedded_' + filename.replace('.pdf', '.csv')
-        embedded_file_path = os.path.join(directory, embedded_filename)
-        
+        # saving embeddings df as csv into existing folder
         df.to_csv(embedded_file_path, index=False, sep=';')
         print("saved embeddings file")
         return df
+
+
+
+def generateEmbedding(text, model="text-embedding-3-small"):
+    text = text.replace("\n", " ")
+    return client.embeddings.create(input=[text], model=model).data[0].embedding
 
 
 def getAllPdfInFolder(folder_path):   
@@ -94,10 +92,6 @@ def getAllPdfInFolder(folder_path):
     
     return pdf_files
 
-def get_embedding(text, model="text-embedding-3-small"):
-    text = text.replace("\n", " ")
-    return client.embeddings.create(input=[text], model=model).data[0].embedding
-
 
 def loadDataset(file_path):
     list_chunks, list_pagenum = chunkFileByChunkSize(file_path)
@@ -108,7 +102,7 @@ def loadDataset(file_path):
     })
 
     df['Embeddings'] = df.TextChunk.apply(
-        lambda x: get_embedding(x, model='text-embedding-3-small'))
+        lambda x: generateEmbedding(x, model='text-embedding-3-small'))
     df['ChunkLength'] = df.TextChunk.apply(lambda x: len(x))
     df = df[["TextChunk", "ChunkLength", "PageNum", "Embeddings"]]
 

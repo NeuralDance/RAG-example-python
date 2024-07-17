@@ -1,2 +1,3 @@
 *.env
 rag_documents/
+*__pychache__
