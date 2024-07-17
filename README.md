@@ -12,7 +12,7 @@ This is a basic example is not using any vector database, but loads all embeddin
 
 ### Pre-Set-Up: Loading Data from PDF files
 
-If you want to have some test data download the PDFs [here](https://drive.google.com/drive/folders/1PWICaG6HF5EtmmN23fs8-UZDxHz05Y_y?usp=sharing.). Save the docs in a folder and add the folder path in your `.env` file under `FOLDER_PATH_DOCUMENTS` (there you also need to set your OpenAI key!).
+If you want to have some test data download the PDFs [here](https://drive.google.com/drive/folders/1PWICaG6HF5EtmmN23fs8-UZDxHz05Y_y?usp=sharing){:target="_blank"}. Save the docs in a folder and add the folder path in your `.env` file under `FOLDER_PATH_DOCUMENTS` (there you also need to set your OpenAI key!).
 
 The code takes the folder, checks for all PDFs and embeds the ones that are not embedded (Embedded files are saved in a csv file in the same folder). We chunk each page of a PDF into multiple embeddings. Each embedding is max. 800 characters long while we try to not cut off in the middle of words/sentences. We clean the text chunks for special characters. All the chunks are embedded using OpenAI's `text-embedding-3-small`.
 
