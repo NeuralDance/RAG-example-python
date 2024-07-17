@@ -18,23 +18,25 @@ The code takes the folder, checks for all PDFs and embeds the ones that are not 
 
 ### 1) User Query
 
-The incoming user query is embedded using `text-embedding-3-small`, similar to all text chunks in our document collection. The query is then routed to both the Keyword Search and the Semantic Search.
+The incoming user query is embedded using OpenAI's `text-embedding-3-small`, similar to all text chunks in our document collection. The query is then routed to both the Keyword Search and the Semantic Search.
 
-### 2) Semantic Search - kNN
+### 2a) Semantic Search - kNN
 
 Using k-Nearest Neighbours and the cosine similarity, we find the closest k embeddings in the document collection to the embedding of the user query.
+<!-- Why do we use both? Are we evaluating two measures of similarity to then compare or combine them? -->
 
-### 3) Keyword Search - BM25
+
+### 2b) Keyword Search - BM25
 
 We use BM25 for keyword search - BM for best match.
 
 More info on BM25: https://en.wikipedia.org/wiki/Okapi_BM25
 
-### 4) Reranking - Reciprocal Rank Fusion (RFF)
+### 3) Reranking - Reciprocal Rank Fusion (RFF)
 
-We will now have two rankings of all text chunks in our document collection: A ranking by keyword search and a ranking by semantic search. To combine these into one ranking we use Reciprocal Rank Fusion (RFF). A more advanced (but paid) alternative woule be Cohere Reranker.
+We now have two rankings of all text chunks in our document collection: A ranking by keyword search and a ranking by semantic search. To combine these into one ranking we use Reciprocal Rank Fusion (RFF). A more advanced (but paid) alternative woule be Cohere's Reranker.
 
-### 5) Output Generation - LLM Request
+### 4) Output Generation - LLM Request
 
 We generate the final answer with an LLM. We give the LLM a very basic system prompt and a text string consisting of the top k embeddings, ranked by the Reciprocal Rank Fusion (RFF).
 
