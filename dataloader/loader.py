@@ -3,8 +3,6 @@ from pathlib import Path
 import pandas as pd
 from openai import OpenAI
 from dotenv import load_dotenv
-import os
-import glob
 import json 
 
 from .chunking import chunkFileByChunkSize
@@ -19,7 +17,6 @@ def embedDocument(file_path: Path):
     # check if already embedded 
     embedded_file_path = file_path.parent / f"Embedded_{file_path.stem}.csv"
     if embedded_file_path.exists():
-        #print("Embeddings table for doc already exists. Loading it!")
         # load embeddings table into df
         directory = file_path.parent
         filename = file_path.name
@@ -62,7 +59,7 @@ def embedDocument(file_path: Path):
         print("saved embeddings file")
         return df
 
-def get_embedding(text: str, model: str = "text-embedding-3-small") -> list[float]:
+def generateEmbedding(text: str, model: str = "text-embedding-3-small") -> list[float]:
     text = text.replace("\n", " ")
     return client.embeddings.create(input=[text], model=model).data[0].embedding
 
