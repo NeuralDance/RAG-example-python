@@ -1,10 +1,15 @@
 from PyPDF2 import PdfReader
+from pathlib import Path
 import re
 import pandas as pd
+import typing as t
 
-def split_text_into_chunks(text, n=800):
+
+def split_text_into_chunks(text: str, n: int = 800) -> t.List[str]:
     """
     chunks pdfs by chunksize of n.
+    
+    
     :params text: text of pdf
     :params n: chunksize
     :returns: list of chunks
@@ -46,13 +51,10 @@ def split_text_into_chunks(text, n=800):
     if current_chunk:
         chunks.append(current_chunk.strip())
 
-    data = {"text_chunks": chunks}
-    df = pd.DataFrame(data)
-
     return chunks
 
 
-def chunkFileByChunkSize(file_path):
+def chunkFileByChunkSize(file_path: Path) -> t.Tuple[t.List[str], t.List[int]]:
     """
     function reads file either with PDFReader for pdfs or with UnstructuredExcel Reader for excel files and 
     splits content chunks
@@ -63,19 +65,30 @@ def chunkFileByChunkSize(file_path):
 
     """
 
-    if (file_path.endswith('.pdf')):
+    if file_path.suffix == '.pdf':
 
         reader = PdfReader(file_path)
 
-        list_chunks = []
-        list_pagenum = []
+        list_chunks: t.List[str] = []
+        list_pagenum: t.List[int] = []
 
         for i in range(0, len(reader.pages)):
             pagenum = i + 1
             text_page = reader.pages[i].extract_text()
 
-            text_page = text_page.replace("..", "").replace("\n", "").replace("•", "").replace("  ", "").replace(
-                "\uf071", "-").replace("\uf06e", "-").replace("\uf0a6", "-").replace("\uf0d8", "-")
+            replacements = {
+                "..": "",
+                "\n": "",
+                "•": "",
+                "  ": "",
+                "\uf071": "-",
+                "\uf06e": "-",
+                "\uf0a6": "-",
+                "\uf0d8": "-"
+            }
+
+            for old, new in replacements.items():
+                text_page = text_page.replace(old, new)
 
             chunks = split_text_into_chunks(text_page)
 
@@ -88,4 +101,6 @@ def chunkFileByChunkSize(file_path):
             raise ValueError(
                 "Length of page numbers and text chunks doesn't match!")
 
-        return list_chunks, list_pagenum
+        return list_chunks, list_pagenum    
+    else:
+        return [], []

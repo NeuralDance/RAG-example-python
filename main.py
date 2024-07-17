@@ -1,3 +1,4 @@
+from pathlib import Path
 from dataloader.loader import loadDataset,loadEmbeddings
 from rag.search import RAG
 from dotenv import load_dotenv
@@ -5,8 +6,11 @@ import os
 load_dotenv()
 
 def main():
-    # load PDFs from specified folder
-    data = loadEmbeddings(os.getenv('FOLDER_PATH_DOCUMENTS'))
+    # take user input of path of documents
+    folder_path = Path(os.getenv('FOLDER_PATH_DOCUMENTS'))
+
+    # load documents
+    data = loadEmbeddings(folder_path)
 
     # take user input of prompt
     # query = "Can you give me information about the description of the warning symbols?"

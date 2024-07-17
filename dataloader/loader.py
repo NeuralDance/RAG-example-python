@@ -1,5 +1,5 @@
 # from PyPDF2 import PdfReader
-import re
+from pathlib import Path
 import pandas as pd
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -7,42 +7,22 @@ import os
 import glob
 import json 
 
-from .chunking import split_text_into_chunks, chunkFileByChunkSize
+from .chunking import chunkFileByChunkSize
 
 # Load environment variables from .env file
 load_dotenv()
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
+client = OpenAI()
 
-def check_embedded_file_existence(file_path):
-    # Extract directory and filename from the original file path
-    directory = os.path.dirname(file_path)
-    filename = os.path.basename(file_path)
-
-    # Construct the embedded file path
-    embedded_filename = 'Embedded_' + filename.replace('.pdf', '.csv')
-    embedded_file_path = os.path.join(directory, embedded_filename)
-
-    # Check if the embedded file exists
-    if os.path.exists(embedded_file_path):
-        return True
-    else:
-        return False
-
-
-def embedDocument(file_path):
-
-    # load embeddings table into df
-    directory = os.path.dirname(file_path)
-    filename = os.path.basename(file_path)
-
-    # Construct the embedded file path
-    embedded_filename = 'Embedded_' + filename.replace('.pdf', '.csv')
-    embedded_file_path = os.path.join(directory, embedded_filename)
-
-
-    # check if document is already embedded 
-    if check_embedded_file_existence(file_path):
+def embedDocument(file_path: Path):
+    file_path = Path(file_path)
+    # check if already embedded 
+    embedded_file_path = file_path.parent / f"Embedded_{file_path.stem}.csv"
+    if embedded_file_path.exists():
+        #print("Embeddings table for doc already exists. Loading it!")
+        # load embeddings table into df
+        directory = file_path.parent
+        filename = file_path.name
     
         # Load the CSV file with semicolon separator
         df = pd.read_csv(embedded_file_path, sep=';')
@@ -57,7 +37,7 @@ def embedDocument(file_path):
         
         # generate embeddings table 
         list_chunks,list_pagenum = chunkFileByChunkSize(file_path)
-        filename = os.path.basename(file_path)
+        filename = file_path.name
         
         df = pd.DataFrame({
             'TextChunk': list_chunks,
@@ -70,30 +50,24 @@ def embedDocument(file_path):
         df['ChunkLength'] = df.TextChunk.apply(lambda x: len(x))
         df = df[["Filename", "TextChunk","ChunkLength","PageNum","Embeddings"]]
         
-        # saving embeddings df as csv into existing folder
+        # saving 
+        directory = file_path.parent
+        filename = file_path.name
+        
+        # Construct the embedded file path
+        embedded_filename = 'Embedded_' + filename.replace('.pdf', '.csv')
+        embedded_file_path = directory / embedded_filename
+        
         df.to_csv(embedded_file_path, index=False, sep=';')
         print("saved embeddings file")
         return df
 
-
-
-def generateEmbedding(text, model="text-embedding-3-small"):
+def get_embedding(text: str, model: str = "text-embedding-3-small") -> list[float]:
     text = text.replace("\n", " ")
     return client.embeddings.create(input=[text], model=model).data[0].embedding
 
 
-def getAllPdfInFolder(folder_path):   
-    # Ensure the folder path ends with a slash for correct file joining
-    if not folder_path.endswith('/'):
-        folder_path += '/'
-    
-    # Use glob to find all PDF files in the folder
-    pdf_files = glob.glob(folder_path + '*.pdf')
-    
-    return pdf_files
-
-
-def loadDataset(file_path):
+def loadDataset(file_path: Path) -> pd.DataFrame:
     list_chunks, list_pagenum = chunkFileByChunkSize(file_path)
 
     df = pd.DataFrame({
@@ -109,8 +83,8 @@ def loadDataset(file_path):
     return df
 
 
-def loadEmbeddings(folder_path):
-    pdf_files = getAllPdfInFolder(folder_path)
+def loadEmbeddings(folder_path: Path):
+    pdf_files = list(folder_path.glob('*.pdf'))
 
     columns = ['Filename', 'TextChunk', 'ChunkLength', 'PageNum', 'Embeddings']
     df_final = pd.DataFrame(columns=columns)
