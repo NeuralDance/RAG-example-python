@@ -11,6 +11,13 @@ class LogVisualizer:
         with open(self.log_file_path, 'r') as file:
             logs = json.load(file)
         return logs
+    
+    def get_trace_metadata(self):
+        trace_tag = self.logs["trace_tag"]
+        trace_id = self.logs["trace_id"]
+        timestamp = self.logs["timestamp"]
+        git_commit = self.logs["git_commit"]
+        return trace_tag,trace_id,timestamp,git_commit
 
     def visualize_user_queries(self):
         for entry in self.logs["user_query"]:

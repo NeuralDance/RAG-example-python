@@ -54,4 +54,9 @@ Happy testing!
 
 ## How to use Observability?
 
-During each run, we automatically log the data of the RAG to provide maximum observability and make both debugging and production easier. Your logs are saved under `rag/observe/logs` in `.json` files. You can set a `trace_tag` in the `main.py` function when running a RAG search to easier find your belonging logs. Examples how to visualise the logs (in more readable format than JSON) use the `Agent-Observability-Visualizer.ipynb` notebook.
+During each run, we automatically log the RAG data to provide maximum observability and make both debugging and production easier. You can disable this setting `logging = False` in `main.py`. Your logs are saved under `rag/observe/logs` in `.json` files. You can set a `trace_tag` in the `main.py` function when running a RAG search to easier find your belonging logs. Examples how to visualise the logs (in more readable format than JSON) use the `Agent-Observability-Visualizer.ipynb` notebook.
+
+### What is logged?
+
+- **Time**
+- **Current GitHub commit**: This makes it easier for you to understand in which state the RAG was when the results ran.

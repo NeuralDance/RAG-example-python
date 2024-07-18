@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime
 import pandas as pd
 import os 
+import subprocess
 
 class Observer:
     def __init__(self,trace_tag=None):
@@ -10,6 +11,7 @@ class Observer:
             "trace_tag": trace_tag,
             "trace_id": str(uuid.uuid4()),  # Generate a unique trace_id
             "timestamp": datetime.now().isoformat(),
+            "git_commit": self._get_current_commit(),
             "semantic_search": [],
             "keyword_search": [],
             "rerank": [],
@@ -19,6 +21,21 @@ class Observer:
             "final_llm_response":[],
         }
 
+    def _get_current_commit(self):
+        try:
+            # Run the Git command to get the current commit hash
+            result = subprocess.run(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            
+            # Check for errors
+            if result.returncode != 0:
+                print("Error retrieving commit hash:", result.stderr)
+                return None
+            
+            # Return the commit hash
+            return result.stdout.strip()
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
 
     def _convert_to_serializable(self, data):
         if isinstance(data, pd.Series):

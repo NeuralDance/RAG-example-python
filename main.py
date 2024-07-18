@@ -7,7 +7,7 @@ from examplary_prompts import EXAMPLE_PROMPTS
 from rag.helper import get_random_element
 load_dotenv()
 
-def main(user_input = True,trace_tag=None):
+def main(user_input = True,logging = True, trace_tag=None):
     # take user input of path of documents
     folder_path = Path(os.getenv('FOLDER_PATH_DOCUMENTS'))
 
@@ -21,7 +21,7 @@ def main(user_input = True,trace_tag=None):
         query = get_random_element(EXAMPLE_PROMPTS)
 
     # run RAG
-    response = RAG(query, data,trace_tag)
+    response = RAG(query, data,logging,trace_tag)
 
     # Display the results in the terminal 
     print(query,"\n\n")
