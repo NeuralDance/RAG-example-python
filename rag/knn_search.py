@@ -1,8 +1,10 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+#from .decorators import observe
 
 # could be made a class semanticSearch 
 # Different types of semantic search could inherit (kNN, aNN, ... ) from
+#@observe
 def calc_semantic_distances(df, embeddings_column, input_embedding):
 
     # setting k equal to the number of embeddings in the table 

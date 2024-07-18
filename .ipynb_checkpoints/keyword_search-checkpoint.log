@@ -1,0 +1,15 @@
+2024-07-18 10:30:45,831 - INFO - {
+    "input_dataframe": [
+        {
+            "TextChunk": "example document one"
+        },
+        {
+            "TextChunk": "example document two"
+        }
+    ],
+    "input_query": "example",
+    "output_scores": [
+        -0.20117973905426256,
+        -0.20117973905426256
+    ]
+}

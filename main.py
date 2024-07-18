@@ -9,7 +9,7 @@ load_dotenv()
 
 
 
-def main(user_input = True):
+def main(user_input = True,trace_tag=None):
     # take user input of path of documents
     folder_path = Path(os.getenv('FOLDER_PATH_DOCUMENTS'))
 
@@ -23,7 +23,7 @@ def main(user_input = True):
         query = get_random_element(EXAMPLE_PROMPTS)
 
     # run RAG
-    response = RAG(query, data)
+    response = RAG(query, data,trace_tag)
 
     # Display the results in the terminal 
     print(query,"\n\n")
@@ -31,4 +31,4 @@ def main(user_input = True):
 
 
 if __name__ == "__main__":
-    main(user_input = True)
+    main(user_input = False,trace_tag="Test1")
