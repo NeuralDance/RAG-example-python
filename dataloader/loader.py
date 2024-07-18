@@ -63,7 +63,6 @@ def generateEmbedding(text: str, model: str = "text-embedding-3-small") -> list[
     text = text.replace("\n", " ")
     return client.embeddings.create(input=[text], model=model).data[0].embedding
 
-
 def loadDataset(file_path: Path) -> pd.DataFrame:
     list_chunks, list_pagenum = chunkFileByChunkSize(file_path)
 
@@ -78,7 +77,6 @@ def loadDataset(file_path: Path) -> pd.DataFrame:
     df = df[["TextChunk", "ChunkLength", "PageNum", "Embeddings"]]
 
     return df
-
 
 def loadEmbeddings(folder_path: Path):
     pdf_files = list(folder_path.glob('*.pdf'))

@@ -3,9 +3,13 @@ from dataloader.loader import loadDataset,loadEmbeddings
 from rag.search import RAG
 from dotenv import load_dotenv
 import os
+from examplary_prompts import EXAMPLE_PROMPTS
+from rag.helper import get_random_element
 load_dotenv()
 
-def main():
+
+
+def main(user_input = True):
     # take user input of path of documents
     folder_path = Path(os.getenv('FOLDER_PATH_DOCUMENTS'))
 
@@ -13,8 +17,10 @@ def main():
     data = loadEmbeddings(folder_path)
 
     # take user input of prompt
-    # query = "Can you give me information about the description of the warning symbols?"
-    query = input("Whats your question? ")
+    if user_input:
+        query = input("Whats your question? ")
+    else:
+        query = get_random_element(EXAMPLE_PROMPTS)
 
     # run RAG
     response = RAG(query, data)
@@ -25,4 +31,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(user_input = True)

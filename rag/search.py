@@ -11,7 +11,7 @@ def RAG(query, data):
     input_embedding = generateEmbedding(query)
 
     # Semantic Search: perform kNN search with cosine similarity
-    data["kNN_distance"] = calc_semantic_distances(data, 'Embeddings', input_embedding)
+    data["kNN_distance"] = calc_semantic_distances(data, 'Embeddings', input_embedding)# chnge to semanti csesarch 
 
     # Keyword Search: perform BM25
     data['BM25_Score'] = keywordSearch(data, query)
