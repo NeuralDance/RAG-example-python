@@ -4,7 +4,7 @@ from .knn_search import calc_semantic_distances
 from .keyword_search import keywordSearch
 from .rerank import rerank
 from .llm_generation import getLlmRespone, getTextForLlm
-from .observe import Observer
+from observe import Observer
 
 def RAG(query, data,logging,trace_tag):
     observer = Observer(trace_tag)
@@ -44,6 +44,6 @@ def RAG(query, data,logging,trace_tag):
 
     # Save the logs in JSON format
     if logging: 
-        observer.save_logs_to_file("rag/observe/logs")
+        observer.save_logs_to_file("observe/logs")
 
     return response

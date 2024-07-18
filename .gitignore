@@ -1,6 +1,6 @@
 *.env
 rag_documents/
-*__pychache__
+*__pycache__*
 venv/
-rag/observe/logs/*
-*.ipynb_checkpoints
+observe/logs/*
+*.ipynb_checkpoints*

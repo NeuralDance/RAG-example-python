@@ -1,6 +1,6 @@
 # RAG Example with Logging
 
-![Example Image](RAG_overview.png)
+![Example Image](assets/RAG_overview.png)
 
 This is an example for a very basic RAG architecture using **semantic search (kNN)**, **keyword search (BM25)** and **reranking with RFF**.
 
@@ -54,7 +54,7 @@ Happy testing!
 
 ## How to use Observability?
 
-During each run, we automatically log the RAG data to provide maximum observability and make both debugging and production easier. You can disable this setting `logging = False` in `main.py`. Your logs are saved under `rag/observe/logs` in `.json` files. You can set a `trace_tag` in the `main.py` function when running a RAG search to easier find your belonging logs. Examples how to visualise the logs (in more readable format than JSON) use the `Agent-Observability-Visualizer.ipynb` notebook.
+During each run, we automatically log the RAG data to provide maximum observability and make both debugging and production easier. You can disable this setting `logging = False` in `main.py`. Your logs are saved under `observe/logs` in `.json` files. You can set a `trace_tag` in the `main.py` function when running a RAG search to easier find your belonging logs. Examples how to visualise the logs (in more readable format than JSON) use the `observe/Agent-Observability-Visualizer.ipynb` notebook.
 
 ### What is logged?
 
