@@ -33,7 +33,7 @@ def RAG(query, data,logging,trace_tag):
     retrievedEmbeddingTexts = getTextForLlm(data, k=7)
 
     # Prepare user prompt based on user input and retrieved text embeddings by RAG
-    prompt = query + "Answer your question based on the following information: " + retrievedEmbeddingTexts
+    prompt = query + " Answer your question based on the following information: " + retrievedEmbeddingTexts
     if logging: 
         observer.log_llm_prompt(prompt)
 

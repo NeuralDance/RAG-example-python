@@ -3,3 +3,4 @@ rag_documents/
 *__pychache__
 venv/
 rag/observe/logs/*
+*.ipynb_checkpoints

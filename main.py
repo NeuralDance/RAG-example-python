@@ -3,8 +3,8 @@ from dataloader.loader import loadDataset,loadEmbeddings
 from rag.search import RAG
 from dotenv import load_dotenv
 import os
-from examplary_prompts import EXAMPLE_PROMPTS
-from rag.helper import get_random_element
+from rag.helper.examplary_prompts import EXAMPLE_PROMPTS
+from rag.helper.helper import get_random_element
 load_dotenv()
 
 def main(user_input = True,logging = True, trace_tag=None):
