@@ -1,12 +1,10 @@
-# RAG Example
+# RAG Example with Logging
+
+![Example Image](RAG_overview.png)
 
 This is an example for a very basic RAG architecture using **semantic search (kNN)**, **keyword search (BM25)** and **reranking with RFF**.
 
-This is a basic example is not using any vector database, but loads all embeddings into memory. Hence this example will not work for large amounts of data. The purpose of this repo is to help RAG n00bs to familiarize with basic RAG architectures by building a RAG themselves without relying on off-the-shelf frameworks like langchain etc.
-
-## An overview of the basic RAG overview can be found here:
-
-![Example Image](RAG_overview.png)
+We dont use any vector database, but loads all embeddings into memory. Hence this example will not work for large amounts of data. The purpose of this repo is to help RAG n00bs to familiarize with basic RAG architectures by building a RAG themselves without relying on off-the-shelf frameworks like langchain etc.
 
 ## Deatils to the RAG Implementation
 
@@ -23,8 +21,8 @@ The incoming user query is embedded using OpenAI's `text-embedding-3-small`, sim
 ### 2a) Semantic Search - kNN
 
 Using k-Nearest Neighbours and the cosine similarity, we find the closest k embeddings in the document collection to the embedding of the user query.
-<!-- Why do we use both? Are we evaluating two measures of similarity to then compare or combine them? -->
 
+<!-- Why do we use both? Are we evaluating two measures of similarity to then compare or combine them? -->
 
 ### 2b) Keyword Search - BM25
 
@@ -53,3 +51,7 @@ python main.py
 You will be asked to provide your query. If you run this the first time it might tske a bit as the documents need to be embedded (same if you add more documents later).
 
 Happy testing!
+
+## How to use Observability?
+
+During each run, we automatically log the data of the RAG to provide maximum observability and make both debugging and production easier. Your logs are saved under `rag/observe/logs` in `.json` files. You can set a `trace_tag` in the `main.py` function when running a RAG search to easier find your belonging logs. Examples how to visualise the logs (in more readable format than JSON) use the `Agent-Observability-Visualizer.ipynb` notebook.

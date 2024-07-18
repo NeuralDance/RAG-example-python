@@ -19,12 +19,14 @@ class Observer:
             "final_llm_response":[],
         }
 
+
     def _convert_to_serializable(self, data):
         if isinstance(data, pd.Series):
             return data.tolist()
         elif isinstance(data, pd.DataFrame):
             return data.to_dict(orient='records')
         return data
+
 
     def log_semantic_search(self, results):
         log_entry = {
@@ -33,6 +35,7 @@ class Observer:
         }
         self.logs["semantic_search"].append(log_entry)
 
+
     def log_keyword_search(self, results):
         log_entry = {
             "timestamp": datetime.now().isoformat(),
@@ -40,12 +43,14 @@ class Observer:
         }
         self.logs["keyword_search"].append(log_entry)
 
+
     def log_rerank(self, reranked_results):
         log_entry = {
             "timestamp": datetime.now().isoformat(),
             "reranked_results": self._convert_to_serializable(reranked_results)
         }
         self.logs["rerank"].append(log_entry)
+
 
     def log_user_query(self, query,input_embedding):
         log_entry = {
@@ -56,12 +61,14 @@ class Observer:
         }
         self.logs["user_query"].append(log_entry)
     
+
     def log_llm_prompt(self, prompt):
         log_entry = {
             "timestamp": datetime.now().isoformat(),
             "prompt": prompt,
         }
         self.logs["llm_prompt"].append(log_entry)
+
 
     def log_final_llm_response(self, response):
         log_entry = {
@@ -70,8 +77,10 @@ class Observer:
         }
         self.logs["final_llm_response"].append(log_entry)
 
+
     def get_logs_as_json(self):
         return json.dumps(self.logs, indent=4)
+
 
     def save_logs_to_file(self, directory):
         """

@@ -6,9 +6,6 @@ from .rerank import rerank
 from .llm_generation import getLlmRespone, getTextForLlm
 from .observe import Observer
 
-
-
-
 def RAG(query, data,trace_tag):
     observer = Observer(trace_tag)
 

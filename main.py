@@ -7,8 +7,6 @@ from examplary_prompts import EXAMPLE_PROMPTS
 from rag.helper import get_random_element
 load_dotenv()
 
-
-
 def main(user_input = True,trace_tag=None):
     # take user input of path of documents
     folder_path = Path(os.getenv('FOLDER_PATH_DOCUMENTS'))
