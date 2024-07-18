@@ -65,3 +65,5 @@ During each run, we automatically log the RAG data to provide maximum observabil
 - **Reranked Results**: We log the reranked results. A table of the top ranked text chunks after reranking, providing the RRF, semantic and keyword search score per embedding.
 - **LLM Prompt**: The LLM prompt provided to the LLM to generate the final response. This includes the system prompt, the user query and the text chunks retrieved by the RAG.
 - **Final LLM Response**
+
+_Not logged yet_: The system prompt. Though you can change the system prompt in `rag/helper/system_prompt.py`.
