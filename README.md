@@ -58,5 +58,10 @@ During each run, we automatically log the RAG data to provide maximum observabil
 
 ### What is logged?
 
-- **Time**
-- **Current GitHub commit**: This makes it easier for you to understand in which state the RAG was when the results ran.
+- **Trace Metadata**: Trace tag, trace ID, timestamp, git commit
+- **User Query**
+- **Keyword Search**: We log the top ranked text chunks with its keyword search score.
+- **Semantic Search**: We log the top ranked text chunks with its semantic search score.
+- **Reranked Results**: We log the reranked results. A table of the top ranked text chunks after reranking, providing the RRF, semantic and keyword search score per embedding.
+- **LLM Prompt**: The LLM prompt provided to the LLM to generate the final response. This includes the system prompt, the user query and the text chunks retrieved by the RAG.
+- **Final LLM Response**
