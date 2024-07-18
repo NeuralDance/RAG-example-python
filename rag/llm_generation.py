@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from .helper.system_prompt import SYSTEM_PROMPT
 
 # Load environment variables from .env file
 load_dotenv()
@@ -20,10 +21,10 @@ def getLlmRespone(prompt, json_mode=False):
 
     if json_mode:
         response_format = "json_object"
-        systemPrompt = """You are a helpful assistant designed to output JSON."""
+        systemPrompt = SYSTEM_PROMPT + """designed to output JSON."""
     else:
         response_format = "text"
-        systemPrompt = """You are a helpful assistant."""
+        systemPrompt = SYSTEM_PROMPT
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-0125",
