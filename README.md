@@ -66,4 +66,4 @@ During each run, we automatically log the RAG data to provide maximum observabil
 - **LLM Prompt**: The LLM prompt provided to the LLM to generate the final response. This includes the system prompt, the user query and the text chunks retrieved by the RAG.
 - **Final LLM Response**
 
-_Not logged yet_: The system prompt. Though you can change the system prompt in `rag/helper/system_prompt.py`.
+**Not logged yet**: The system prompt. Though you can change the system prompt in `rag/helper/system_prompt.py`.
